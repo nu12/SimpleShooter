@@ -8,6 +8,8 @@
 
 class USkeletalMeshComponent;
 class UParticleSystem;
+class APawn;
+class AController;
 
 UCLASS()
 class SIMPLESHOOTER_API AGun : public AActor
@@ -17,13 +19,16 @@ class SIMPLESHOOTER_API AGun : public AActor
 public:	
 	AGun();
 
+	virtual void Tick(float DeltaTime) override;
+
 	void PullTrigger();
+
+private:
+	bool HasNullPointers() const;
+
 
 protected:
 	virtual void BeginPlay() override;
-
-public:	
-	virtual void Tick(float DeltaTime) override;
 
 
 private:
@@ -33,4 +38,6 @@ private:
 	USceneComponent* Root = nullptr;
 	UPROPERTY(EditAnywhere)
 	UParticleSystem* MuzzleEffect = nullptr;
+
+	AController* OwnerController = nullptr;
 };
