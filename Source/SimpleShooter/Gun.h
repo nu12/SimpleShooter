@@ -33,14 +33,20 @@ protected:
 
 private:
 	UPROPERTY(EditAnywhere)
+	bool bDrawDebugHelpers = false;
+
+	UPROPERTY(EditAnywhere)
 	USkeletalMeshComponent* MeshComponent = nullptr;
 	UPROPERTY(EditAnywhere)
 	USceneComponent* Root = nullptr;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	UParticleSystem* MuzzleEffect = nullptr;
 
+	UPROPERTY(EditDefaultsOnly)
+	UParticleSystem* HitWorldEffect = nullptr;
+
 	UPROPERTY(EditAnywhere)
-	float MaxRange = 1000.f;
+	float MaxRange = 10000.f;
 
 	AController* OwnerController = nullptr;
 };
