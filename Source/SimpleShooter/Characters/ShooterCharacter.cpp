@@ -2,6 +2,7 @@
 
 
 #include "ShooterCharacter.h"
+#include "SimpleShooter/Gun.h"
 
 // Sets default values
 AShooterCharacter::AShooterCharacter()
@@ -15,7 +16,10 @@ AShooterCharacter::AShooterCharacter()
 void AShooterCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	Gun = GetWorld()->SpawnActor<AGun>(GunClass);
+	GetMesh()->HideBoneByName(FName(TEXT("weapon_r")), EPhysBodyOp::PBO_None);
+	Gun->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, FName(TEXT("WeaponSocket")));
+	Gun->SetOwner(this);
 }
 
 // Called every frame
