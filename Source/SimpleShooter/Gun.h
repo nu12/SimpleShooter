@@ -39,5 +39,8 @@ private:
 	UPROPERTY(EditAnywhere)
 	UParticleSystem* MuzzleEffect = nullptr;
 
+	UPROPERTY(EditAnywhere)
+	float MaxRange = 1000.f;
+
 	AController* OwnerController = nullptr;
 };

@@ -47,16 +47,20 @@ void AGun::PullTrigger()
 	if (HasNullPointers()) return;
 	UGameplayStatics::SpawnEmitterAttached(MuzzleEffect, MeshComponent, FName(TEXT("MuzzleFlashSocket")));
 
-	// DrawDegubCamera
-	//DrawDebugCamera(const UWorld* InWorld, FVector const& Location, FRotator const& Rotation, float FOVDeg, float Scale=1.f, FColor const& Color=FColor::White, bool bPersistentLines=false, float LifeTime=-1.f, uint8 DepthPriority = 0);
 	FVector ViewPointLocation;  // out
 	FRotator ViewPointRotation; // out
 
 	OwnerController->GetPlayerViewPoint(ViewPointLocation, ViewPointRotation);
 
-	DrawDebugCamera(GetWorld(), ViewPointLocation, ViewPointRotation, 90.f, 2.f, FColor::Red, true);
+	FVector LineTraceEnd = ViewPointLocation + ViewPointRotation.Vector() * MaxRange;
+	FHitResult HitResult;
 
-	
+	// ECC_GameTraceChannel1: Created new trace channel. Verify in DefaultEngine.ini what is the channel name assigned to it.
+	GetWorld()->LineTraceSingleByChannel(HitResult, ViewPointLocation, LineTraceEnd, ECC_GameTraceChannel1);
+
+
+	DrawDebugPoint(GetWorld(), HitResult.ImpactPoint, 10.f, FColor::Red, true);
+
 }
 
 bool AGun::HasNullPointers() const
