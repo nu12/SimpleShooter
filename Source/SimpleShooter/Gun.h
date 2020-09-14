@@ -7,6 +7,7 @@
 #include "Gun.generated.h"
 
 class USkeletalMeshComponent;
+class UParticleSystem;
 
 UCLASS()
 class SIMPLESHOOTER_API AGun : public AActor
@@ -15,6 +16,8 @@ class SIMPLESHOOTER_API AGun : public AActor
 	
 public:	
 	AGun();
+
+	void PullTrigger();
 
 protected:
 	virtual void BeginPlay() override;
@@ -28,4 +31,6 @@ private:
 	USkeletalMeshComponent* MeshComponent = nullptr;
 	UPROPERTY(EditAnywhere)
 	USceneComponent* Root = nullptr;
+	UPROPERTY(EditAnywhere)
+	UParticleSystem* MuzzleEffect = nullptr;
 };

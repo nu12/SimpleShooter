@@ -40,6 +40,7 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	PlayerInputComponent->BindAxis(FName(TEXT("LookRight")), this, &APawn::AddControllerYawInput);
 	PlayerInputComponent->BindAxis(FName(TEXT("LookRightAtRate")), this, &AShooterCharacter::LookRightAtRate);
 	PlayerInputComponent->BindAction(FName(TEXT("Jump")), IE_Pressed, this, &ACharacter::Jump);
+	PlayerInputComponent->BindAction(FName(TEXT("Fire")), IE_Pressed, this, &AShooterCharacter::Fire);
 }
 
 void AShooterCharacter::MoveForward(float Value)
@@ -60,4 +61,9 @@ void AShooterCharacter::LookUpAtRate(float Value)
 void AShooterCharacter::LookRightAtRate(float Value)
 { // Make Axis Input Value framerate independent
 	AddControllerYawInput(Value * RotationSpeed * GetWorld()->GetDeltaSeconds());
+}
+
+void AShooterCharacter::Fire()
+{
+	Gun->PullTrigger();
 }

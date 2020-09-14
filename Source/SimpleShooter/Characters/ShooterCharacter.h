@@ -48,4 +48,6 @@ private:
 
 	void LookRightAtRate(float Value);
 
+	void Fire();
+
 };
