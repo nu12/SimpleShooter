@@ -35,40 +35,33 @@ void AGun::Tick(float DeltaTime)
 
 void AGun::PullTrigger()
 {
-	if (!OwnerController)
-	{
-		APawn* GunOwner = Cast<APawn>(GetOwner());
-		if (GunOwner)
-		{
-			OwnerController = GunOwner->GetController();
-		}
-	}
-
+	if (!OwnerController) SetupController();
 	if (HasNullPointers()) return;
-	
 	UGameplayStatics::SpawnEmitterAttached(MuzzleEffect, MeshComponent, FName(TEXT("MuzzleFlashSocket")));
 
-	FVector ViewPointLocation;  // out
-	FRotator ViewPointRotation; // out
+	FShootData ShootData(GetWorld(), OwnerController, MaxRange);
 
-	OwnerController->GetPlayerViewPoint(ViewPointLocation, ViewPointRotation);
-
-	FVector LineTraceEnd = ViewPointLocation + ViewPointRotation.Vector() * MaxRange;
-	FHitResult HitResult;
-
-	// ECC_GameTraceChannel1: Created new trace channel. Verify in DefaultEngine.ini what is the channel name assigned to it.
-	GetWorld()->LineTraceSingleByChannel(HitResult, ViewPointLocation, LineTraceEnd, ECC_GameTraceChannel1);
-
-	if(bDrawDebugHelpers)
-	{
-		DrawDebugPoint(GetWorld(), HitResult.ImpactPoint, 10.f, FColor::Red, true);
-	}
-
-	// Invert the direction of the effect: the effect should be spawned towards the player camera.
-	FVector OppositeDirection = -ViewPointRotation.Vector();
-	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitWorldEffect, HitResult.ImpactPoint, OppositeDirection.Rotation());
-
+	if (!ShootData.HasHit) return;
+	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitWorldEffect, ShootData.HitResult.ImpactPoint, ShootData.OppositeRotation);
+		
+	if (!ShootData.HitResult.GetActor()) return;
+	
+	FPointDamageEvent DamageEvent(Damage, ShootData.HitResult, ShootData.OppositeDirection, nullptr);
+	ShootData.HitResult.GetActor()->TakeDamage(Damage, DamageEvent,OwnerController, this);
+		
+	if (!bDrawDebugHelpers) return;
+	DrawDebugPoint(GetWorld(), ShootData.HitResult.ImpactPoint, 10.f, FColor::Red, true);
 }
+
+void AGun::SetupController()
+{
+	APawn* GunOwner = Cast<APawn>(GetOwner());
+	if (GunOwner)
+	{
+		OwnerController = GunOwner->GetController();
+	}
+}
+
 
 bool AGun::HasNullPointers() const
 {

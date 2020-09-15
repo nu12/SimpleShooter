@@ -20,13 +20,14 @@ void AShooterCharacter::BeginPlay()
 	GetMesh()->HideBoneByName(FName(TEXT("weapon_r")), EPhysBodyOp::PBO_None);
 	Gun->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, FName(TEXT("WeaponSocket")));
 	Gun->SetOwner(this);
+
+	CurrentHealth = MaxHealth;
 }
 
 // Called every frame
 void AShooterCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 // Called to bind functionality to input
@@ -41,6 +42,14 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	PlayerInputComponent->BindAxis(FName(TEXT("LookRightAtRate")), this, &AShooterCharacter::LookRightAtRate);
 	PlayerInputComponent->BindAction(FName(TEXT("Jump")), IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction(FName(TEXT("Fire")), IE_Pressed, this, &AShooterCharacter::Fire);
+}
+
+float AShooterCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	float DamageApplied = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	CurrentHealth = FMath::Clamp<float>(CurrentHealth - DamageAmount, 0.f, MaxHealth);
+	UE_LOG(LogTemp, Warning, TEXT("Current Health: %f"), CurrentHealth);
+	return DamageAmount;
 }
 
 void AShooterCharacter::MoveForward(float Value)

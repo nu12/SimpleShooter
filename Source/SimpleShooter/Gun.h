@@ -11,6 +11,26 @@ class UParticleSystem;
 class APawn;
 class AController;
 
+struct FShootData {
+	FVector StartLocation;
+	FRotator StartRotation;
+	FVector EndLocation;
+	FVector OppositeDirection;
+	FRotator OppositeRotation;
+	FHitResult HitResult;
+	bool HasHit;
+
+	FShootData(UWorld* World, AController* Controller, float Range)
+	{
+		Controller->GetPlayerViewPoint(StartLocation, StartRotation);
+		EndLocation = StartLocation + StartRotation.Vector() * Range;
+		OppositeDirection = -StartRotation.Vector();
+		OppositeRotation = OppositeDirection.Rotation();
+		// ECC_GameTraceChannel1: Created new trace channel. Verify in DefaultEngine.ini what is the channel name assigned to it.
+		HasHit = World->LineTraceSingleByChannel(HitResult, StartLocation, EndLocation, ECC_GameTraceChannel1);
+	}
+};
+
 UCLASS()
 class SIMPLESHOOTER_API AGun : public AActor
 {
@@ -22,6 +42,8 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	void PullTrigger();
+
+	void SetupController();
 
 private:
 	bool HasNullPointers() const;
@@ -47,6 +69,9 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	float MaxRange = 10000.f;
+
+	UPROPERTY(EditAnywhere)
+	float Damage = 10.f;
 
 	AController* OwnerController = nullptr;
 };
