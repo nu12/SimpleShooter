@@ -33,6 +33,8 @@ public:
 	UFUNCTION(BlueprintPure)
 	bool IsDead() const;
 
+	void Fire();
+
 private:
 	UPROPERTY(EditAnywhere)
 	float RotationSpeed = 50.f;
@@ -59,6 +61,5 @@ private:
 
 	void LookRightAtRate(float Value);
 
-	void Fire();
 
 };
