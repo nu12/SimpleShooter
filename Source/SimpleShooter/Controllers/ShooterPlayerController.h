@@ -6,9 +6,7 @@
 #include "GameFramework/PlayerController.h"
 #include "ShooterPlayerController.generated.h"
 
-/**
- * 
- */
+class UUserWidget;
 UCLASS()
 class SIMPLESHOOTER_API AShooterPlayerController : public APlayerController
 {
@@ -20,5 +18,8 @@ public:
 private:
 	UPROPERTY(EditAnywhere)
 	float RestartDelay = 5.f;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UUserWidget> LoseScreenClass;
 
 };

@@ -3,6 +3,7 @@
 
 #include "ShooterPlayerController.h"
 #include "TimerManager.h"
+#include "Blueprint/UserWidget.h"
 
 void AShooterPlayerController::GameHasEnded(AActor* EndGameFocus, bool bIsWinner)
 {
@@ -10,4 +11,8 @@ void AShooterPlayerController::GameHasEnded(AActor* EndGameFocus, bool bIsWinner
 	
 	FTimerHandle RestartTimer;
 	GetWorldTimerManager().SetTimer(RestartTimer, this, &APlayerController::RestartLevel, RestartDelay);
+
+	UUserWidget* Widget = CreateWidget(this, LoseScreenClass);
+	if(!Widget)return;
+	Widget->AddToViewport();
 }
