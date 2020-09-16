@@ -26,8 +26,11 @@ struct FShootData {
 		EndLocation = StartLocation + StartRotation.Vector() * Range;
 		OppositeDirection = -StartRotation.Vector();
 		OppositeRotation = OppositeDirection.Rotation();
+
+		FCollisionQueryParams CollisionParams;
+		CollisionParams.AddIgnoredActor(Controller->GetPawn());
 		// ECC_GameTraceChannel1: Created new trace channel. Verify in DefaultEngine.ini what is the channel name assigned to it.
-		HasHit = World->LineTraceSingleByChannel(HitResult, StartLocation, EndLocation, ECC_GameTraceChannel1);
+		HasHit = World->LineTraceSingleByChannel(HitResult, StartLocation, EndLocation, ECC_GameTraceChannel1, CollisionParams);
 	}
 };
 
