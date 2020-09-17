@@ -3,6 +3,7 @@
 
 #include "ShooterAIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "SimpleShooter/Characters/ShooterCharacter.h"
 
 void AShooterAIController::BeginPlay()
 {

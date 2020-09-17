@@ -12,7 +12,16 @@ void AShooterPlayerController::GameHasEnded(AActor* EndGameFocus, bool bIsWinner
 	FTimerHandle RestartTimer;
 	GetWorldTimerManager().SetTimer(RestartTimer, this, &APlayerController::RestartLevel, RestartDelay);
 
-	UUserWidget* Widget = CreateWidget(this, LoseScreenClass);
+	UUserWidget* Widget = nullptr;
+	if (bIsWinner)
+	{
+		Widget = CreateWidget(this, WinScreenClass);
+	}
+	else
+	{
+		Widget = CreateWidget(this, LoseScreenClass);
+	}
+	
 	if(!Widget)return;
 	Widget->AddToViewport();
 }
