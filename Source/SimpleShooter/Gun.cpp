@@ -37,20 +37,19 @@ void AGun::PullTrigger()
 {
 	if (!OwnerController) SetupController();
 	if (HasNullPointers()) return;
+
 	UGameplayStatics::SpawnEmitterAttached(MuzzleEffect, MeshComponent, FName(TEXT("MuzzleFlashSocket")));
+	UGameplayStatics::SpawnSoundAttached(MuzzleSound, MeshComponent, FName(TEXT("MuzzleFlashSocket")));
 
 	FShootData ShootData(GetWorld(), OwnerController, MaxRange);
 
 	if (!ShootData.HasHit) return;
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitWorldEffect, ShootData.HitResult.ImpactPoint, ShootData.OppositeRotation);
+	UGameplayStatics::SpawnSoundAtLocation(GetWorld(), HitWorldSound, ShootData.HitResult.ImpactPoint);
 		
 	if (!ShootData.HitResult.GetActor()) return;
-	
 	FPointDamageEvent DamageEvent(Damage, ShootData.HitResult, ShootData.OppositeDirection, nullptr);
-	ShootData.HitResult.GetActor()->TakeDamage(Damage, DamageEvent,OwnerController, this);
-		
-	if (!bDrawDebugHelpers) return;
-	DrawDebugPoint(GetWorld(), ShootData.HitResult.ImpactPoint, 10.f, FColor::Red, true);
+	ShootData.HitResult.GetActor()->TakeDamage(Damage, DamageEvent, OwnerController, this);
 }
 
 void AGun::SetupController()
@@ -74,6 +73,18 @@ bool AGun::HasNullPointers() const
 	if (!HitWorldEffect)
 	{
 		UE_LOG(LogTemp, Error, TEXT("HitWorld effect not found!"));
+		return true;
+	}
+
+	if (!MuzzleSound)
+	{
+		UE_LOG(LogTemp, Error, TEXT("MuzzleSound not found!"));
+		return true;
+	}
+
+	if (!HitWorldSound)
+	{
+		UE_LOG(LogTemp, Error, TEXT("HitWorldSound not found!"));
 		return true;
 	}
 
