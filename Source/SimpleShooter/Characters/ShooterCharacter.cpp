@@ -89,6 +89,11 @@ void AShooterCharacter::LookRightAtRate(float Value)
 	AddControllerYawInput(Value * RotationSpeed * GetWorld()->GetDeltaSeconds());
 }
 
+float AShooterCharacter::GetHealthPercent() const
+{
+	return CurrentHealth / MaxHealth;
+}
+
 void AShooterCharacter::Fire()
 {
 	Gun->PullTrigger();
