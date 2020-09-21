@@ -7,6 +7,7 @@
 #include "ShooterPlayerController.generated.h"
 
 class UUserWidget;
+class USoundBase;
 UCLASS()
 class SIMPLESHOOTER_API AShooterPlayerController : public APlayerController
 {
@@ -22,6 +23,12 @@ private:
 	UPROPERTY(EditAnywhere)
 	float RestartDelay = 5.f;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Setup", meta = (AllowPrivateAccess = "true"))
+	float StartDelay = 7.f;
+
+	UPROPERTY(EditAnywhere)
+	USoundBase* IntroSound = nullptr;
+
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UUserWidget> LoseScreenClass;
 
@@ -34,4 +41,5 @@ private:
 	UPROPERTY()
 	UUserWidget* HUDWidget = nullptr;
 
+	void EnableMovementAndWidget();
 };

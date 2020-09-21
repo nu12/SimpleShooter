@@ -4,14 +4,17 @@
 #include "ShooterPlayerController.h"
 #include "TimerManager.h"
 #include "Blueprint/UserWidget.h"
+#include "Kismet/GameplayStatics.h"
 
 void AShooterPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	HUDWidget = CreateWidget(this, HUDClass);
-	if (!HUDWidget) return;
-	HUDWidget->AddToViewport();
+	if (!IntroSound) return;
+
+	GetPawn()->DisableInput(this);	
+	FTimerHandle EnableMovementAndWidget;
+	GetWorld()->GetTimerManager().SetTimer(EnableMovementAndWidget, this, &AShooterPlayerController::EnableMovementAndWidget, StartDelay, false);
 }
 
 void AShooterPlayerController::GameHasEnded(AActor* EndGameFocus, bool bIsWinner)
@@ -36,4 +39,16 @@ void AShooterPlayerController::GameHasEnded(AActor* EndGameFocus, bool bIsWinner
 
 	if (!HUDWidget) return;
 	HUDWidget->RemoveFromViewport();
+}
+
+void AShooterPlayerController::EnableMovementAndWidget()
+{
+
+	GetPawn()->EnableInput(this);
+
+	UGameplayStatics::PlaySoundAtLocation(GetWorld(), IntroSound, GetPawn()->GetActorLocation());
+
+	HUDWidget = CreateWidget(this, HUDClass);
+	if (!HUDWidget) return;
+	HUDWidget->AddToViewport();
 }
