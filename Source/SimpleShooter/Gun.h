@@ -51,6 +51,11 @@ public:
 private:
 	bool HasNullPointers() const;
 
+	void PlayMuzzleEffects() const;
+
+	void PlayHitEffects(FShootData& ShootData) const;
+
+	void DealDamage(FShootData& ShootData);
 
 protected:
 	virtual void BeginPlay() override;
@@ -59,6 +64,7 @@ protected:
 private:
 	UPROPERTY(EditAnywhere)
 	USkeletalMeshComponent* MeshComponent = nullptr;
+
 	UPROPERTY(EditAnywhere)
 	USceneComponent* Root = nullptr;
 	
@@ -75,7 +81,7 @@ private:
 	USoundBase* HitWorldSound = nullptr;
 
 	UPROPERTY(EditAnywhere)
-	float MaxRange = 10000.f;
+	float MaxRange = 1000.f;
 
 	UPROPERTY(EditAnywhere)
 	float Damage = 10.f;

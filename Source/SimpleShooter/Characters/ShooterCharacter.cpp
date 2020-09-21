@@ -66,7 +66,6 @@ float AShooterCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Dama
 bool AShooterCharacter::IsDead() const
 {
 	return CurrentHealth <= 0.f;
-	
 }
 
 void AShooterCharacter::MoveForward(float Value)

@@ -38,16 +38,31 @@ void AGun::PullTrigger()
 	if (!OwnerController) SetupController();
 	if (HasNullPointers()) return;
 
-	UGameplayStatics::SpawnEmitterAttached(MuzzleEffect, MeshComponent, FName(TEXT("MuzzleFlashSocket")));
-	UGameplayStatics::SpawnSoundAttached(MuzzleSound, MeshComponent, FName(TEXT("MuzzleFlashSocket")));
-
 	FShootData ShootData(GetWorld(), OwnerController, MaxRange);
+	
+	PlayMuzzleEffects();
 
 	if (!ShootData.HasHit) return;
-	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitWorldEffect, ShootData.HitResult.ImpactPoint, ShootData.OppositeRotation);
-	UGameplayStatics::SpawnSoundAtLocation(GetWorld(), HitWorldSound, ShootData.HitResult.ImpactPoint);
+	PlayHitEffects(ShootData);
 		
 	if (!ShootData.HitResult.GetActor()) return;
+	DealDamage(ShootData);
+}
+
+void AGun::PlayMuzzleEffects() const
+{
+	UGameplayStatics::SpawnEmitterAttached(MuzzleEffect, MeshComponent, FName(TEXT("MuzzleFlashSocket")));
+	UGameplayStatics::SpawnSoundAttached(MuzzleSound, MeshComponent, FName(TEXT("MuzzleFlashSocket")));
+}
+
+void AGun::PlayHitEffects(FShootData& ShootData) const
+{
+	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitWorldEffect, ShootData.HitResult.ImpactPoint, ShootData.OppositeRotation);
+	UGameplayStatics::SpawnSoundAtLocation(GetWorld(), HitWorldSound, ShootData.HitResult.ImpactPoint);
+}
+
+void AGun::DealDamage(FShootData& ShootData)
+{
 	FPointDamageEvent DamageEvent(Damage, ShootData.HitResult, ShootData.OppositeDirection, nullptr);
 	ShootData.HitResult.GetActor()->TakeDamage(Damage, DamageEvent, OwnerController, this);
 }

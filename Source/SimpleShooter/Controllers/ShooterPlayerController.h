@@ -21,10 +21,10 @@ protected:
 
 private:
 	UPROPERTY(EditAnywhere)
-	float RestartDelay = 5.f;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Setup", meta = (AllowPrivateAccess = "true"))
 	float StartDelay = 7.f;
+
+	UPROPERTY(EditAnywhere)
+	float RestartDelay = 5.f;
 
 	UPROPERTY(EditAnywhere)
 	USoundBase* IntroSound = nullptr;
@@ -41,5 +41,5 @@ private:
 	UPROPERTY()
 	UUserWidget* HUDWidget = nullptr;
 
-	void EnableMovementAndWidget();
+	void StartGameplay();
 };

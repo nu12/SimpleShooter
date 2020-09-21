@@ -14,7 +14,7 @@ void AShooterPlayerController::BeginPlay()
 
 	GetPawn()->DisableInput(this);	
 	FTimerHandle EnableMovementAndWidget;
-	GetWorld()->GetTimerManager().SetTimer(EnableMovementAndWidget, this, &AShooterPlayerController::EnableMovementAndWidget, StartDelay, false);
+	GetWorld()->GetTimerManager().SetTimer(EnableMovementAndWidget, this, &AShooterPlayerController::StartGameplay, StartDelay, false);
 }
 
 void AShooterPlayerController::GameHasEnded(AActor* EndGameFocus, bool bIsWinner)
@@ -41,9 +41,8 @@ void AShooterPlayerController::GameHasEnded(AActor* EndGameFocus, bool bIsWinner
 	HUDWidget->RemoveFromViewport();
 }
 
-void AShooterPlayerController::EnableMovementAndWidget()
+void AShooterPlayerController::StartGameplay()
 {
-
 	GetPawn()->EnableInput(this);
 
 	UGameplayStatics::PlaySoundAtLocation(GetWorld(), IntroSound, GetPawn()->GetActorLocation());
