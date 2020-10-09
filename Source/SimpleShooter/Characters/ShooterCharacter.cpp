@@ -20,10 +20,17 @@ void AShooterCharacter::BeginPlay()
 	Super::BeginPlay();
 	Gun = GetWorld()->SpawnActor<AGun>(GunClass);
 	GetMesh()->HideBoneByName(FName(TEXT("weapon_r")), EPhysBodyOp::PBO_None);
+	// Attention: WeaponSocket needs to be created in SkelMesh
 	Gun->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, FName(TEXT("WeaponSocket")));
 	Gun->SetOwner(this);
 
 	CurrentHealth = MaxHealth;
+}
+
+float AShooterCharacter::GetDirection()
+{
+	FVector InverseTransformDirection = GetActorTransform().InverseTransformVectorNoScale(GetVelocity());
+	return FRotationMatrix::MakeFromX(InverseTransformDirection).Rotator().Yaw;
 }
 
 // Called every frame

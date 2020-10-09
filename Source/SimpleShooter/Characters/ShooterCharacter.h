@@ -17,9 +17,13 @@ public:
 	// Sets default values for this character's properties
 	AShooterCharacter();
 
+	UFUNCTION(BlueprintPure)
+	float GetDirection();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
 
 public:	
 	// Called every frame
